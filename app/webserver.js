@@ -20,14 +20,18 @@ const fileUpload = require("express-fileupload");
 
 // Webserver
 const express = require("express");
-const http = require('http');
-const https = require('https');
+const http = require("http");
+const https = require("https");
+const morgan = require("morgan");
 const app = express();
 const server = http.createServer(app);
-const servers = https.createServer({
-  key: fs.readFileSync(path.join(__dirname, "..", "SSL", "selfsigned.key")),
-  cert: fs.readFileSync(path.join(__dirname, "..", "SSL", "selfsigned.crt")),
-}, app);
+const servers = https.createServer(
+  {
+    key: fs.readFileSync(path.join(__dirname, "..", "SSL", "selfsigned.key")),
+    cert: fs.readFileSync(path.join(__dirname, "..", "SSL", "selfsigned.crt")),
+  },
+  app
+);
 
 module.exports = (option = {}) => {
   const webserver = server.listen(config.app.port, config.app.host, () => {
@@ -65,6 +69,7 @@ module.exports = (option = {}) => {
           );
         }
       );
+      app.use(morgan("dev"));
     }
   });
 
